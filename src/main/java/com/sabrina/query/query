@@ -1,0 +1,90 @@
+***************************************************CREAZIONE TABELLE**************************************************
+
+CREATE TABLE film (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  titolo VARCHAR(255) NOT NULL,
+  regista VARCHAR(255) NOT NULL,
+  genere VARCHAR(255) NOT NULL,
+  locandina VARCHAR(255) NOT NULL,
+  trailerlink VARCHAR(255),
+  riassunto TEXT,
+  sfondo VARCHAR(255)
+);
+
+CREATE TABLE sale (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nomeSala VARCHAR(255) NOT NULL,
+  id_film INT,
+  FOREIGN KEY (id_film) REFERENCES film(id) ON DELETE SET NULL
+);
+
+
+CREATE TABLE posti (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  codice VARCHAR(10) NOT NULL,
+  disponibile BOOLEAN DEFAULT TRUE,
+  id_sala INT,
+  FOREIGN KEY (id_sala) REFERENCES sale(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE prenotazioni (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nomeUtente VARCHAR(255) NOT NULL,
+  cognomeUtente VARCHAR(255) NOT NULL,
+  emailUtente VARCHAR(255) NOT NULL,
+  id_posto INT,
+  data DATETIME NOT NULL,
+  FOREIGN KEY (id_posto) REFERENCES posti(id) ON DELETE CASCADE
+);
+
+
+*****************************************************INSERT*****************************************
+
+INSERT INTO film (titolo, regista, genere, locandina, trailerlink, riassunto, sfondo) VALUES
+('Inception', 'Christopher Nolan', 'Fantascienza', 'inception.jpg', 'https://www.youtube.com/watch?v=8hP9D6kZseM', 'Un ladro specializzato nell\'estrazione di segreti dal subconscio viene incaricato di impiantare un\'idea.', 'sfondo_inception.jpg'),
+('Il Padrino', 'Francis Ford Coppola', 'Crime', 'il_padrino.jpg', 'https://www.youtube.com/watch?v=sY1S34973zA', 'La storia della famiglia mafiosa Corleone e della sua ascesa al potere.', 'sfondo_ilpadrino.jpg'),
+('La vita è bella', 'Roberto Benigni', 'Dramma', 'vita_e_bella.jpg', 'https://www.youtube.com/watch?v=pAYEQP8gx3w', 'Un padre usa la fantasia per proteggere il figlio dagli orrori del campo di concentramento.', 'sfondo_lavitaebella.jpg'),
+('Interstellar', 'Christopher Nolan', 'Fantascienza', 'interstellar.jpg', 'https://www.youtube.com/watch?v=zSWdZVtXT7E', 'Un gruppo di esploratori viaggia attraverso un wormhole per salvare l\'umanità.', 'sfondo_interstellar.jpg'),
+('Pulp Fiction', 'Quentin Tarantino', 'Crime', 'pulp_fiction.jpg', 'https://www.youtube.com/watch?v=s7EdQ4FqbhY', 'Storie intrecciate di criminali, droga e redenzione nella Los Angeles degli anni 90.', 'sfondo_pulpfiction.jpg'),
+('Matrix', 'Lana e Lilly Wachowski', 'Fantascienza', 'matrix.jpg', 'https://www.youtube.com/watch?v=vKQi3bBA1y8', 'Un hacker scopre che la realtà è una simulazione creata dalle macchine.', 'sfondo_matrix.jpg'),
+('Fight Club', 'David Fincher', 'Dramma', 'fight_club.jpg', 'https://www.youtube.com/watch?v=SUXWAEX2jlg', 'Un uomo disilluso fonda un club segreto dove uomini sfogano la loro rabbia.', 'sfondo_fightclub.jpg'),
+('Forrest Gump', 'Robert Zemeckis', 'Dramma', 'forrest_gump.jpg', 'https://www.youtube.com/watch?v=bLvqoHBptjg', 'La vita di un uomo semplice che attraversa momenti storici degli USA.', 'sfondo_forrestgump.jpg'),
+('The Dark Knight', 'Christopher Nolan', 'Azione', 'dark_knight.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 'Batman affronta il caos portato dal Joker a Gotham City.', 'sfondo_darkknight.jpg'),
+('Titanic', 'James Cameron', 'Romantico', 'titanic.jpg', 'https://www.youtube.com/watch?v=kVrqfYjkTdQ', 'Una storia d\'amore tra due passeggeri del celebre transatlantico inaffondabile.', 'sfondo_titanic.jpg');
+
+
+
+INSERT INTO sale (nomeSala, id_film) VALUES
+('Sala Lumière', 1),
+('Sala Fellini', 2),
+('Sala Kubrick', 3),
+('Sala Chaplin', 4),
+('Sala Tarantino', 5),
+('Sala Hitchcock', 6),
+('Sala Spielberg', 7),
+('Sala Scorsese', 8),
+('Sala Coppola', 9),
+('Sala Nolan', 10);
+
+
+-- Inserimento dei posti (da A1 a J10) per ogni sala
+INSERT INTO posti (codice, disponibile, id_sala)
+SELECT
+  CONCAT(CHAR(64 + fila), numero) AS codice,
+  TRUE AS disponibile,
+  s.id AS id_sala
+FROM sale s,
+  (SELECT 1 AS fila UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+   UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS file,
+  (SELECT 1 AS numero UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+   UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS numeri;
+
+ Cosa fa questo script dei posti ?
+Crea per ogni sala (cioè per ogni record in sale) 100 posti con codici da A1 a J10.
+
+Imposta ogni codice con CONCAT(CHAR(64 + fila), numero) → es. CHAR(65) = 'A', CHAR(66) = 'B', ecc.
+
+Imposta il campo disponibile su TRUE.
+
+Collega i posti alla rispettiva id_sala.
