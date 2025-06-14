@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +23,11 @@ public class FilmService {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	private Connection getConnection()
-	{
-	    try {
-	        // DEBUG: stampa i valori per vedere cosa riceve
-	        System.out.println("=== DEBUG CONNESSIONE ===");
-	        System.out.println("DATABASE_URL: " + System.getenv("DATABASE_URL"));
-	        System.out.println("DB_USERNAME: " + System.getenv("DB_USERNAME"));
-	        System.out.println("DB_PASSWORD: " + (System.getenv("DB_PASSWORD") != null ? "***PRESENTE***" : "NULL"));
-	        System.out.println("Conf.getConnectionString(): " + Conf.getConnectionString());
-	        System.out.println("Conf.getUsername(): " + Conf.getUsername());
-	        System.out.println("Conf.getPassword(): " + (Conf.getPassword() != null ? "***PRESENTE***" : "NULL"));
-	        System.out.println("===========================");
-	        
-	        Class.forName("org.postgresql.Driver");
-	        conn = DriverManager.getConnection(Conf.getConnectionString(), Conf.getUsername(), Conf.getPassword());
-	        
-	        System.out.println("Connessione riuscita!");
-	        
-	    } catch (Exception e) {
-	        System.out.println("ERRORE CONNESSIONE: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-	    return conn;
+	private Connection getConnection() throws ClassNotFoundException, SQLException {
+		Class.forName("org.postgresql.Driver");
+		return DriverManager.getConnection(Conf.getConnectionString(), Conf.getUsername(), Conf.getPassword());
 	}
+
 	
 	
 	public List<Film> list()

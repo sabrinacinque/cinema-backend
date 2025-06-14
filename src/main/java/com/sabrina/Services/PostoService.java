@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +22,11 @@ public class PostoService {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-    private Connection getConnection() {
-        try {
-        	Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection(
-                Conf.getConnectionString(), 
-                Conf.getUsername(), 
-                Conf.getPassword()
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+		Class.forName("org.postgresql.Driver");
+		return DriverManager.getConnection(Conf.getConnectionString(), Conf.getUsername(), Conf.getPassword());
+	}
+
 
     public List<Posto> list() {
         List<Posto> list = new ArrayList<>();
