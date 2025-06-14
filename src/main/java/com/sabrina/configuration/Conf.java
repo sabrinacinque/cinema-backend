@@ -4,7 +4,7 @@ public class Conf {
 
     // Usa variabili d'ambiente per Railway, con fallback per sviluppo locale
     private static final String dbUrl = System.getenv("DATABASE_URL") != null
-    ? System.getenv("DATABASE_URL").replace("postgresql://", "jdbc:postgresql://") + "?sslmode=require"
+    ? "jdbc:postgresql://turntable.proxy.rlwy.net:47788/railway?sslmode=require"
     : "jdbc:postgresql://localhost:5432/cinema";
     
     private static final String username = System.getenv("DB_USERNAME") != null 
