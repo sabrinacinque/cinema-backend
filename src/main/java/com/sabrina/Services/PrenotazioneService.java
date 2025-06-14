@@ -27,7 +27,8 @@ public class PrenotazioneService {
 
 	private final JavaMailSender mailSender;
 
-	private String frontendBase = "http://localhost:4200";
+	@Value("${FRONTEND_URL:http://localhost:4200}")
+	private String frontendBase;
 
 	public PrenotazioneService(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
