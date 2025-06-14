@@ -27,7 +27,7 @@ public class FilmService {
 		
 		try {
 			
-			   Class.forName("com.mysql.cj.jdbc.Driver");
+			   Class.forName("org.postgresql.Driver");
 			   conn = DriverManager.getConnection(Conf.getConnectionString(), Conf.getUsername(), Conf.getPassword());
 		}
 		catch (Exception e) {

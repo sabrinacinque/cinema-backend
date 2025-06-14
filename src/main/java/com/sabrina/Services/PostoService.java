@@ -23,7 +23,7 @@ public class PostoService {
 
     private Connection getConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+        	Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(
                 Conf.getConnectionString(), 
                 Conf.getUsername(), 

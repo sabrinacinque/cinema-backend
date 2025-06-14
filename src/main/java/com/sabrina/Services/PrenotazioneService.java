@@ -37,7 +37,7 @@ public class PrenotazioneService {
 	// Connessione al database
 	// ------------------------------------------------------------------------
 	private Connection getConnection() throws ClassNotFoundException, SQLException {
-		Class.forName("com.mysql.cj.jdbc.Driver");
+		Class.forName("org.postgresql.Driver");
 		return DriverManager.getConnection(Conf.getConnectionString(), Conf.getUsername(), Conf.getPassword());
 	}
 
@@ -184,17 +184,28 @@ public class PrenotazioneService {
 	    String plainText = "Hai prenotato i tuoi posti. Controlla il client email per i dettagli.";
 	    helper.setText(plainText, html);
 
-	    // Aggiungi l'immagine inline
+
+	 // Aggiungi l'immagine inline
+	 
 	    try {
-	        ClassPathResource logo = new ClassPathResource("static/images/logoGrande.png"); // Modifica il percorso secondo la tua struttura
+	        ClassPathResource logo = new ClassPathResource("logoGrande.png");
+	        
 	        if (logo.exists()) {
 	            helper.addInline("logoCinema", logo, "image/png");
+	            System.out.println("Logo aggiunto da classpath!");
 	        } else {
-	            System.err.println("Logo non trovato nel percorso specificato");
+	            // Fallback per sviluppo locale
+	            java.io.File logoFile = new java.io.File("src/main/resources/logoGrande.png");
+	            if (logoFile.exists()) {
+	                helper.addInline("logoCinema", new org.springframework.core.io.FileSystemResource(logoFile), "image/png");
+	                System.out.println("Logo aggiunto da filesystem!");
+	            } else {
+	                System.err.println("Logo non trovato");
+	            }
 	        }
 	    } catch (Exception e) {
 	        System.err.println("Errore durante l'aggiunta del logo: " + e.getMessage());
-	        // Invia comunque l'email senza logo
+	        e.printStackTrace();
 	    }
 
 	    mailSender.send(msg);
