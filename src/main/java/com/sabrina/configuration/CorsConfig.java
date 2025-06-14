@@ -14,11 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(
-                    "http://localhost:4200",           // Angular locale
-                    "https://*.netlify.app",           // Netlify
-                    "https://*.netlify.com"            // Netlify custom domain
-                )
+                .allowedOriginPatterns("*")  // Usa allowedOriginPatterns invece di allowedOrigins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -28,10 +24,12 @@ public class CorsConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:4200");
-        configuration.addAllowedOrigin("https://*.netlify.app");
-        configuration.addAllowedOrigin("https://*.netlify.com");
-        configuration.addAllowedMethod("*");
+        configuration.addAllowedOriginPattern("*");  // Usa allowedOriginPattern
+        configuration.addAllowedMethod("GET");
+        configuration.addAllowedMethod("POST");
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("OPTIONS");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
         
